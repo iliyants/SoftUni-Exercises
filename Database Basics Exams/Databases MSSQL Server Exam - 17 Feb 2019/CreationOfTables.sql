@@ -1,0 +1,64 @@
+CREATE TABLE Students(
+Id INT PRIMARY KEY IDENTITY(1,1),
+FirstName NVARCHAR(30) NOT NULL,
+MiddleName NVARCHAR(25),
+LastName NVARCHAR(30) NOT NULL,
+Age INT CHECK (Age >= 5 AND Age <= 100) NOT NULL,
+[Address] NVARCHAR(50),
+Phone CHAR(10)
+)
+
+CREATE TABLE Subjects(
+Id INT PRIMARY KEY IDENTITY(1,1),
+[Name] NVARCHAR(20) NOT NULL,
+Lessons INT CHECK(Lessons > 0) NOT NULL
+)
+
+CREATE TABLE StudentsSubjects(
+Id INT PRIMARY KEY IDENTITY(1,1),
+StudentId INT FOREIGN KEY REFERENCES Students(Id) NOT NULL,
+SubjectId INT FOREIGN KEY REFERENCES Subjects(Id) NOT NULL,
+Grade DECIMAL(3,2) CHECK(Grade >= 2 AND Grade <= 6) NOT NULL
+)
+
+CREATE TABLE Exams(
+Id INT PRIMARY KEY IDENTITY(1,1),
+[Date] DATETIME,
+SubjectId INT FOREIGN KEY REFERENCES Subjects(Id) NOT NULL,
+)
+
+CREATE TABLE StudentsExams(
+StudentId INT NOT NULL,
+ExamId INT NOT NULL,
+Grade DECIMAL(3,2) CHECK(Grade >= 2 AND Grade <= 6) NOT NULL
+
+CONSTRAINT PK_StudentExams PRIMARY KEY(StudentId,ExamId)
+
+CONSTRAINT FK_StudentsExams_Students FOREIGN KEY (StudentId) REFERENCES Students (Id),
+CONSTRAINT FK_StudentsExams_Exams FOREIGN KEY (ExamId) REFERENCES Exams (Id)
+)
+
+CREATE TABLE Teachers(
+Id INT PRIMARY KEY IDENTITY(1,1),
+FirstName NVARCHAR(20) NOT NULL,
+LastName NVARCHAR(20) NOT NULL,
+[Address] NVARCHAR(20) NOT NULL,
+Phone CHAR(10),
+SubjectId INT FOREIGN KEY REFERENCES Subjects(Id) NOT NULL
+)
+
+CREATE TABLE StudentsTeachers(
+StudentId INT NOT NULL,
+TeacherId INT NOT NULL
+
+CONSTRAINT PK_StudentsTeachers PRIMARY KEY(StudentId,TeacherId)
+
+CONSTRAINT FK_StudentsTeachers_Students FOREIGN KEY (StudentId) REFERENCES Students (Id),
+CONSTRAINT FK_StudentsTeachers_Teachers FOREIGN KEY (TeacherId) REFERENCES Teachers (Id)
+
+)
+
+
+
+
+
