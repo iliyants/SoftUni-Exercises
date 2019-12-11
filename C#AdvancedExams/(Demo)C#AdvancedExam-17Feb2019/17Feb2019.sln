@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29418.71
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Socks", "Socks\Socks.csproj", "{79176942-CB10-4AE9-8829-7B0F7F5B57C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelFunctions", "ExcelFunctions\ExcelFunctions.csproj", "{979274F9-B07D-4400-B0DA-CFEE4068BF69}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{79176942-CB10-4AE9-8829-7B0F7F5B57C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79176942-CB10-4AE9-8829-7B0F7F5B57C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79176942-CB10-4AE9-8829-7B0F7F5B57C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79176942-CB10-4AE9-8829-7B0F7F5B57C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{979274F9-B07D-4400-B0DA-CFEE4068BF69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{979274F9-B07D-4400-B0DA-CFEE4068BF69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{979274F9-B07D-4400-B0DA-CFEE4068BF69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{979274F9-B07D-4400-B0DA-CFEE4068BF69}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {032AEF25-7AB8-46C1-BDD6-BECE4FBA0492}
+	EndGlobalSection
+EndGlobal
