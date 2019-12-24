@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Tasks;
 using SIS.HTTP.Common;
 using SIS.HTTP.Enums;
 using SIS.HTTP.Exceptions;
@@ -27,7 +28,7 @@ namespace SIS.WebServer
             this.serverRoutingTable = serverRoutingTable;
         }
 
-        private IHttpRequest ReadRequest()
+        private async Task<IHttpRequest> ReadRequestAsync()
         {
             // PARSE REQUEST FROM BYTE DATA
             var result = new StringBuilder();
@@ -70,39 +71,40 @@ namespace SIS.WebServer
             return this.serverRoutingTable.Get(httpRequest.RequestMethod, httpRequest.Path).Invoke(httpRequest);
         }
 
-        private void PrepareResponse(IHttpResponse httpResponse)
+        private async Task PrepareResponse(IHttpResponse httpResponse)
         {
             // PREPARES RESPONSE -> MAPS IT TO BYTE DATA
             byte[] byteSegments = httpResponse.GetBytes();
 
-            this.client.Send(byteSegments, SocketFlags.None);
+            await this.client.SendAsync(byteSegments, SocketFlags.None);
         }
 
-        public void ProcessRequest()
+        public async Task ProcessRequestAsync()
         {
             IHttpResponse httpResponse = null;
 
             try
             {
-                IHttpRequest httpRequest = this.ReadRequest();
+                var httpRequest = await this.ReadRequestAsync();
 
                 if (httpRequest != null)
                 {
                     Console.WriteLine($"Processing: {httpRequest.RequestMethod} {httpRequest.Path}...");
 
                     httpResponse = this.HandleRequest(httpRequest);
+
+                    await this.PrepareResponse(httpResponse);
                 }
             }
             catch (BadRequestException e)
             {
-                httpResponse = new TextResult(e.Message, HttpResponseStatusCode.BadRequest);
+                await this.PrepareResponse(new TextResult(e.ToString(), HttpResponseStatusCode.BadRequest));
             }
             catch (Exception e)
             {
-                httpResponse = new TextResult(e.Message, HttpResponseStatusCode.InternalServerError);
+                await this.PrepareResponse(new TextResult(e.ToString(), HttpResponseStatusCode.InternalServerError));
             }
 
-            this.PrepareResponse(httpResponse);
             this.client.Shutdown(SocketShutdown.Both);
         }
     }
