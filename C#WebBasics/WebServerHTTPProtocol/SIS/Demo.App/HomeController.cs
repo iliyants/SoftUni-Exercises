@@ -1,4 +1,5 @@
-﻿using SIS.HTTP.Enums;
+﻿using SIS.HTTP.Cookies;
+using SIS.HTTP.Enums;
 using SIS.HTTP.Requests.Contracts;
 using SIS.HTTP.Responses;
 using SIS.HTTP.Responses.Contracts;
@@ -12,7 +13,12 @@ namespace Demo.App.Controllers
         {
             string content = "<h1>Hello World!</h1>";
 
-            return new HtmlResult(content, HttpResponseStatusCode.Ok);
+
+            var htmlResult = new HtmlResult(content, HttpResponseStatusCode.Ok);
+
+            htmlResult.Cookies.AddCookie(new HttpCookie("lang", "en"));
+
+            return htmlResult;
         }
     }
 }

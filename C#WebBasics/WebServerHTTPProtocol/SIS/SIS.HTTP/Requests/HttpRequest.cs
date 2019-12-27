@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using SIS.HTTP.Common;
+using SIS.HTTP.Cookies;
+using SIS.HTTP.Cookies.Contracts;
 using SIS.HTTP.Enums;
 using SIS.HTTP.Exceptions;
 using SIS.HTTP.Headers;
 using SIS.HTTP.Headers.Contracts;
 using SIS.HTTP.Requests.Contracts;
+using SIS.HTTP.Sessions.Contracts;
 
 namespace SIS.HTTP.Requests
 {
@@ -19,6 +22,7 @@ namespace SIS.HTTP.Requests
             this.FormData = new Dictionary<string, object>();
             this.QueryData = new Dictionary<string, object>();
             this.Headers = new HttpHeaderCollection();
+            this.Cookies = new HttpCookieCollection();
 
             this.ParseRequest(requestString);
         }
@@ -30,6 +34,9 @@ namespace SIS.HTTP.Requests
         public IHttpHeaderCollection Headers { get; }
         public HttpRequestMethod RequestMethod { get; private set; }
 
+        public IHttpCookieCollection Cookies { get; }
+        public IHttpSession Session { get; set;}
+
         private bool IsValidRequestLine(string[] requestLineParams)
         {
             if (requestLineParams.Length != 3
@@ -39,6 +46,26 @@ namespace SIS.HTTP.Requests
             }
 
             return true;
+        }
+
+        private void ParseCookies()
+        {
+            if (this.Headers.ContainsHeader(HttpHeader.Cookie))
+            {
+                string value = this.Headers.GetHeader(HttpHeader.Cookie).Value;
+
+                string[] unparsedCookies = value.Split("; ", StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var unparsedCookie in unparsedCookies)
+                {
+                    string[] cookieValuePair = unparsedCookie.Split("=");
+
+                    HttpCookie httpCookie = new HttpCookie(cookieValuePair[0], cookieValuePair[1], false);
+
+                    this.Cookies.AddCookie(httpCookie);
+                }
+
+            }
         }
 
         private bool IsValidRequestQueryString(string queryString, string[] queryParameters)
@@ -148,7 +175,7 @@ namespace SIS.HTTP.Requests
             this.ParseRequestPath();
 
             this.ParseRequestHeaders(this.ParsePlainRequestHeaders(splitRequestString).ToArray());
-            //this.ParseCookies();
+            this.ParseCookies();
 
             this.ParseRequestParameters(splitRequestString[splitRequestString.Length - 1]);
         }
