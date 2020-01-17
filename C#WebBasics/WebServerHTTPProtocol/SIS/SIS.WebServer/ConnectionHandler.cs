@@ -82,6 +82,32 @@ namespace SIS.WebServer
             await this.client.SendAsync(byteSegments, SocketFlags.None);
         }
 
+        public async Task ProcessRequestAsync()
+        {
+            try
+            {
+                var httpRequest = await this.ReadRequestAsync();
+
+                if (httpRequest != null)
+                {
+                    Console.WriteLine($"Processing: {httpRequest.RequestMethod} {httpRequest.Path}...");
+                   // var sessionId = this.SetRequestSession(httpRequest);
+                    var httpResponse = this.HandleRequest(httpRequest);
+                   // this.SetResponseSession(httpResponse, sessionId);
+                    await this.PrepareResponse(httpResponse);
+                }
+            }
+            catch (BadRequestException e)
+            {
+                await this.PrepareResponse(new TextResult(e.ToString(), HttpResponseStatusCode.BadRequest));
+            }
+            catch (Exception e)
+            {
+                await this.PrepareResponse(new TextResult(e.ToString(), HttpResponseStatusCode.InternalServerError));
+            }
+
+            this.client.Shutdown(SocketShutdown.Both);
+        }
         private string SetRequestSession(IHttpRequest httpRequest)
         {
             string sessionId = null;
@@ -111,31 +137,6 @@ namespace SIS.WebServer
             }
         }
 
-        public async Task ProcessRequestAsync()
-        {
-            try
-            {
-                var httpRequest = await this.ReadRequestAsync();
 
-                if (httpRequest != null)
-                {
-                    Console.WriteLine($"Processing: {httpRequest.RequestMethod} {httpRequest.Path}...");
-                    var sessionId = this.SetRequestSession(httpRequest);
-                    var httpResponse = this.HandleRequest(httpRequest);
-                    this.SetResponseSession(httpResponse, sessionId);
-                    await this.PrepareResponse(httpResponse);
-                }
-            }
-            catch (BadRequestException e)
-            {
-                await this.PrepareResponse(new TextResult(e.ToString(), HttpResponseStatusCode.BadRequest));
-            }
-            catch (Exception e)
-            {
-                await this.PrepareResponse(new TextResult(e.ToString(), HttpResponseStatusCode.InternalServerError));
-            }
-
-            this.client.Shutdown(SocketShutdown.Both);
-        }
     }
 }

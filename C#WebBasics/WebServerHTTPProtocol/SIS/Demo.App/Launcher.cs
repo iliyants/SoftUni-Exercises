@@ -17,7 +17,7 @@ namespace Demo.App
 
             serverRoutingTable.Add(HttpRequestMethod.Get, "/", request => new HomeController().Index(request));
 
-            Server server = new Server(8000, serverRoutingTable);
+            Server server = new Server(80, serverRoutingTable);
 
             server.Run();
 
