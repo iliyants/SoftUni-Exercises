@@ -5,23 +5,22 @@
     using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
-
     using IRunes.Data;
     using IRunes.Models;
     using SIS.HTTP.Requests.Contracts;
-    using SIS.HTTP.Responses.Contracts;
     using SIS.WebServer;
     using SIS.WebServer.Attributes;
+    using SIS.WebServer.Result;
 
     public class UsersController : Controller
     {
-        public IHttpResponse Register(IHttpRequest httpRequest)
+        public ActionResult Register(IHttpRequest httpRequest)
         {
             return this.View();
         }
 
         [HttpPost(ActionName = "Register")]
-        public IHttpResponse RegisterConfirm(IHttpRequest httpRequest)
+        public ActionResult RegisterConfirm(IHttpRequest httpRequest)
         {
             using (var context = new RunesDbContext())
             {
@@ -52,13 +51,13 @@
             return this.Redirect("/Users/Login");
         }
 
-        public IHttpResponse Login(IHttpRequest httpRequest)
+        public ActionResult Login(IHttpRequest httpRequest)
         {
             return this.View();
         }
 
         [HttpPost(ActionName = "Login")]
-        public IHttpResponse LoginConfirm(IHttpRequest httpRequest)
+        public ActionResult LoginConfirm(IHttpRequest httpRequest)
         {
             using (var context = new RunesDbContext())
             {
@@ -80,7 +79,7 @@
             return this.Redirect("/");
         }
 
-        public IHttpResponse Logout(IHttpRequest httpRequest)
+        public ActionResult Logout(IHttpRequest httpRequest)
         {
             this.SignOut(httpRequest);
             return this.Redirect("/");

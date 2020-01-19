@@ -1,18 +1,23 @@
 ﻿namespace IRunes.App.Controllers
 {
+    using IRunes.Models;
     using SIS.HTTP.Requests.Contracts;
-    using SIS.HTTP.Responses.Contracts;
     using SIS.WebServer;
     using SIS.WebServer.Attributes;
+    using SIS.WebServer.Result;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Reflection;
 
     public class HomeController : Controller
     {
         [HttpGet(Url = "/")]
-        public IHttpResponse IndexSlash(IHttpRequest httpRequest)
+        public ActionResult IndexSlash(IHttpRequest httpRequest)
         {
             return Index(httpRequest);
         }
-        public IHttpResponse Index(IHttpRequest httpRequest)
+        public ActionResult Index(IHttpRequest httpRequest)
         {
             if (this.IsLoggedIn(httpRequest))
             {
@@ -22,5 +27,7 @@
 
             return this.View();
         }
+
+
     }
 }

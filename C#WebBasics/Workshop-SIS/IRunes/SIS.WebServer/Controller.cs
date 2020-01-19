@@ -5,6 +5,12 @@ using System.IO;
 using SIS.WebServer.Result;
 using SIS.HTTP.Enums;
 using System.Runtime.CompilerServices;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System.Xml;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace SIS.WebServer
 {
@@ -32,7 +38,7 @@ namespace SIS.WebServer
             return httpRequest.Session.ContainsParameter("username");
         }
 
-        protected void SignIn(IHttpRequest httpRequest, string id, string username, string email )
+        protected void SignIn(IHttpRequest httpRequest, string id, string username, string email)
         {
             httpRequest.Session.AddParameter("id", id);
             httpRequest.Session.AddParameter("username", username);
@@ -44,22 +50,54 @@ namespace SIS.WebServer
             httpRequest.Session.ClearParameters();
         }
 
-        protected IHttpResponse View([CallerMemberName] string view = null)
+        protected ActionResult View([CallerMemberName] string view = null)
         {
             var controllerName = this.GetType().Name.Replace("Controller", "");
             var viewName = view;
-            var content = File.ReadAllText("Views/" + controllerName + "/" + viewName + ".html");
+            var content = System.IO.File.ReadAllText("Views/" + controllerName + "/" + viewName + ".html");
 
             content = ParseTemplate(content);
 
             return new HtmlResult(content, HttpResponseStatusCode.Ok);
         }
 
-        protected IHttpResponse Redirect(string location)
+        protected ActionResult Redirect(string location)
         {
             return new RedirectResult(location);
         }
 
+        protected ActionResult Xml(object obj)
+        {
+            var serializer = new XmlSerializer(obj.GetType());
 
+            var sb = new StringBuilder();
+
+            var namespaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
+
+            serializer.Serialize(new StringWriter(sb), obj, namespaces);
+
+            return new XmlResult(sb.ToString());
+
+        }
+
+        protected ActionResult Json(object obj)
+        {
+            var serializedObject = JsonConvert.SerializeObject(obj, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            });
+
+            return new JsonResult(serializedObject);
+        }
+
+        protected ActionResult File(byte[] fileContent)
+        { 
+            return new FileResult(fileContent);
+        }
+
+        protected ActionResult NotFound(string message)
+        {
+            return new NotFoundResult(message);
+        }
     }
 }

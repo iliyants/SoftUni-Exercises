@@ -12,10 +12,11 @@
     using SIS.HTTP.Responses.Contracts;
     using SIS.WebServer;
     using SIS.WebServer.Attributes;
+    using SIS.WebServer.Result;
 
     public class AlbumsController : Controller
     {
-        public IHttpResponse All(IHttpRequest httpRequest)
+        public ActionResult All(IHttpRequest httpRequest)
         {
             if (!this.IsLoggedIn(httpRequest))
             {
@@ -43,7 +44,7 @@
             }
         }
 
-        public IHttpResponse Create(IHttpRequest httpRequest)
+        public ActionResult Create(IHttpRequest httpRequest)
         {
             if (!this.IsLoggedIn(httpRequest))
             {
@@ -54,7 +55,7 @@
         }
 
         [HttpPost(ActionName = "Create")]
-        public IHttpResponse CreateConfirm(IHttpRequest httpRequest)
+        public ActionResult CreateConfirm(IHttpRequest httpRequest)
         {
             if (!this.IsLoggedIn(httpRequest))
             {
@@ -83,7 +84,7 @@
             }
         }
 
-        public IHttpResponse Details(IHttpRequest httpRequest)
+        public ActionResult Details(IHttpRequest httpRequest)
         {
             if (!this.IsLoggedIn(httpRequest))
             {

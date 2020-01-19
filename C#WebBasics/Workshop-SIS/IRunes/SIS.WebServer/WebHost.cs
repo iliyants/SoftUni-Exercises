@@ -41,13 +41,16 @@ namespace SIS.WebServer
                             BindingFlags.DeclaredOnly
                           | BindingFlags.Public
                           | BindingFlags.Instance)
-                    .Where(f => !f.IsSpecialName && !IsOverride(f));
+                    .Where(f => !f.IsSpecialName && !IsOverride(f)
+                      && f.GetCustomAttributes(typeof(NonActionAttribute), false).Length == 0);
 
                 foreach (var action in actions)
                 {
                     var attribute =
                         action.GetCustomAttributes()
-                        .Where(x => x.GetType().IsSubclassOf(typeof(BaseHttpAttribute))).LastOrDefault() as BaseHttpAttribute;
+                        .Where(x => x.GetType()
+                        .IsSubclassOf(typeof(BaseHttpAttribute)))
+                        .LastOrDefault() as BaseHttpAttribute;
                         
 
                     var path = $"/{controller.Name.Replace("Controller", string.Empty)}/{action.Name}";

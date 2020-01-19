@@ -4,7 +4,6 @@
     using System.Net;
     using System.Net.Sockets;
     using System.Threading.Tasks;
-
     using SIS.HTTP.Common;
     using SIS.WebServer.Routing.Contracts;
 
@@ -48,6 +47,7 @@
                 var client = this.tcpListener.AcceptSocketAsync().GetAwaiter().GetResult();
 
                 Task.Run(() => this.ListenAsync(client));
+
             }
         }
     }

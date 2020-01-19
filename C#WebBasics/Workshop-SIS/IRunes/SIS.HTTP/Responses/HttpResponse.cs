@@ -64,7 +64,7 @@
                 result.Append($"{this.Cookies}").Append(GlobalConstants.HttpNewLine);
             }
 
-            result.Append(GlobalConstants.HttpNewLine);
+           // result.Append(GlobalConstants.HttpNewLine);
 
             return result.ToString();
         }
