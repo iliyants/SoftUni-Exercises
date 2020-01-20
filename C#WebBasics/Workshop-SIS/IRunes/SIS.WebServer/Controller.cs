@@ -1,6 +1,5 @@
 ﻿using SIS.HTTP.Requests.Contracts;
 using System.Collections.Generic;
-using SIS.HTTP.Responses.Contracts;
 using System.IO;
 using SIS.WebServer.Result;
 using SIS.HTTP.Enums;
@@ -10,7 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Xml;
 using System.Text;
-using System.Text.RegularExpressions;
+using SIS.WebServer.Identity;
 
 namespace SIS.WebServer
 {
@@ -22,6 +21,12 @@ namespace SIS.WebServer
         }
 
         protected Dictionary<string, object> ViewData { get; set; }
+        public IHttpRequest Request { get; set; }
+        public Principal User =>
+            this.Request.Session.ContainsParameter("principal")
+            ? (Principal)this.Request.Session.GetParameter("principal")
+            : null;
+            
 
         private string ParseTemplate(string viewContent)
         {
@@ -33,21 +38,24 @@ namespace SIS.WebServer
             return viewContent;
         }
 
-        protected bool IsLoggedIn(IHttpRequest httpRequest)
+        protected bool IsLoggedIn()
         {
-            return httpRequest.Session.ContainsParameter("username");
+            return this.Request.Session.ContainsParameter("principal");
         }
 
-        protected void SignIn(IHttpRequest httpRequest, string id, string username, string email)
+        protected void SignIn(string id, string username, string email)
         {
-            httpRequest.Session.AddParameter("id", id);
-            httpRequest.Session.AddParameter("username", username);
-            httpRequest.Session.AddParameter("email", email);
+            this.Request.Session.AddParameter("principal", new Principal()
+            {
+                Id = id,
+                Username = username,
+                Email = email
+            });
         }
 
-        protected void SignOut(IHttpRequest httpRequest)
+        protected void SignOut()
         {
-            httpRequest.Session.ClearParameters();
+            this.Request.Session.ClearParameters();
         }
 
         protected ActionResult View([CallerMemberName] string view = null)

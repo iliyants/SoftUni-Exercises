@@ -21,8 +21,6 @@
         {
             CoreValidator.ThrowIfNullOrEmpty(parameterName, nameof(parameterName));
 
-            // TODO: Validation for existing parameter (maybe throw exception)
-
             return this.sessionParameters[parameterName];
         }
 

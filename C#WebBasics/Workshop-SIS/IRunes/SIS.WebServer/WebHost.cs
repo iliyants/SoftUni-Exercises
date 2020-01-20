@@ -1,6 +1,8 @@
 ﻿using SIS.HTTP.Enums;
+using SIS.HTTP.Responses;
 using SIS.HTTP.Responses.Contracts;
 using SIS.WebServer.Attributes;
+using SIS.WebServer.Result;
 using SIS.WebServer.Routing;
 using SIS.WebServer.Routing.Contracts;
 using System;
@@ -76,7 +78,17 @@ namespace SIS.WebServer
                     serverRoutingTable.Add(httpMethod, path, request =>
                     {
                         var controllerInstance = Activator.CreateInstance(controller);
-                        var response = action.Invoke(controllerInstance, new[] { request }) as IHttpResponse;
+                        ((Controller)controllerInstance).Request = request;
+
+                        var principal = ((Controller)controllerInstance).User;
+                        var authorizeAttribute = action.GetCustomAttributes()
+                        .LastOrDefault(a => a.GetType() == typeof(AuthorizeAttribute)) as AuthorizeAttribute;
+
+                        if (authorizeAttribute != null && !authorizeAttribute.IsInAuthority(principal))
+                        {
+                            return new HttpResponse(HttpResponseStatusCode.Forbidden);
+                        }
+                        var response = action.Invoke(controllerInstance, new object[0]) as ActionResult;
                         return response;
                     });
 

@@ -13,15 +13,16 @@
     public class HomeController : Controller
     {
         [HttpGet(Url = "/")]
-        public ActionResult IndexSlash(IHttpRequest httpRequest)
+        public ActionResult IndexSlash()
         {
-            return Index(httpRequest);
+            return Index();
         }
-        public ActionResult Index(IHttpRequest httpRequest)
+
+        public ActionResult Index()
         {
-            if (this.IsLoggedIn(httpRequest))
+            if (this.IsLoggedIn())
             {
-                this.ViewData.Add("Username", httpRequest.Session.GetParameter("username").ToString());
+                this.ViewData["Username"] = this.User.Username;
                 return this.View("/Index-Logged");
             }
 
