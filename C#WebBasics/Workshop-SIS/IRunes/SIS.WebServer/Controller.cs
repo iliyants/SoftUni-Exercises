@@ -64,7 +64,11 @@ namespace SIS.WebServer
             var viewName = view;
             var content = System.IO.File.ReadAllText("Views/" + controllerName + "/" + viewName + ".html");
 
-            content = ParseTemplate(content);
+            string layoutContent = System.IO.File.ReadAllText("Views/_Layout.html");
+            layoutContent = ParseTemplate(layoutContent);
+            layoutContent = layoutContent.Replace("@RenderBody()", content);
+
+            content = ParseTemplate(layoutContent);
 
             return new HtmlResult(content, HttpResponseStatusCode.Ok);
         }
