@@ -10,11 +10,14 @@ using Newtonsoft.Json.Serialization;
 using System.Xml;
 using System.Text;
 using SIS.WebServer.Identity;
+using SIS.WebServer.ViewEngine;
 
 namespace SIS.WebServer
 {
     public class Controller
     {
+
+        private IViewEngine viewEngine = new SISViewEngine();
         public Controller()
         {
             this.ViewData = new Dictionary<string, object>();

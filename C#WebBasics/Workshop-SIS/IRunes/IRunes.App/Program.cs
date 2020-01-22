@@ -10,6 +10,7 @@ namespace IRunes.App
         public static void Main()
         {
             WebHost.Start(new Startup());
+
         }
     }
 }
