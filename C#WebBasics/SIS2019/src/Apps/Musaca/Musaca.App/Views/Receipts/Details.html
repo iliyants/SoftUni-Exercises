@@ -1,0 +1,38 @@
+﻿﻿<div class="container-fluid d-flex justify-content-center">
+    <div class="w-50">
+        <h1 class="text-center">Receipt Details</h1>
+        <hr class="hr-2 bg-musaca">
+        @foreach(var product in Model.Products)
+        {
+        <div class="product-holder d-flex justify-content-between">
+            <h6>@product.Name</h6>
+            <div class="col-3 d-flex justify-content-between text-center">
+                <h6 class="col-6">x@product.Quantity</h6>
+                <h6 class="col-6 text-center">@product.Price lv.</h6>
+            </div>
+        </div>
+        }
+
+        <hr class="hr-2 bg-musaca">
+        <div class="total-holder d-flex justify-content-between">
+            <h3>Total</h3>
+            <h3>@Model.Total lv.</h3>
+
+        </div>
+        <hr class="hr-2 bg-musaca">
+        <div class="issuedOn-holder d-flex justify-content-between">
+            <h4>Issued On</h4>
+            <h4>@Model.IssuedOn</h4>
+        </div>
+        <div class="cashier-holder d-flex justify-content-between">
+            <h4>Cashier</h4>
+            <h4>@Model.Cashier</h4>
+        </div>
+        <hr class="hr-2 bg-musaca">
+        <div class="receipt-id-handler d-flex justify-content-between">
+            <h3>Receipt</h3>
+            <h3>@Model.Id</h3>
+        </div>
+
+    </div>
+</div>

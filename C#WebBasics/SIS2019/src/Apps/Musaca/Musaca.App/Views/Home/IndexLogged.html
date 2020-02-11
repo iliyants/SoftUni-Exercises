@@ -1,0 +1,43 @@
+﻿﻿<div class="w-50 ">
+
+    <form method="get" action="/Orders/Create" class="form-inline d-flex justify-content-between">
+        <label for="barcode" class="form-control border-musaca text-musaca text-center col-md-2 mr-1">Product</label>
+        <input id="barcode" type="text" name="barcode" class="form-control col-md-4 mr-1" placeholder="Barcode..." />
+        <input type="text" name="quantity" class="form-control col-md-4 mr-1" placeholder="Quantity..." />
+        <button type="submit" class="btn bg-musaca text-white col-md-1">Order</button>
+    </form>
+</div>
+<hr class="hr-2 bg-musaca" />
+<div class="d-flex justify-content-between">
+    <h3 class="col-10">Product Name</h3>
+
+    <h3 class="col-1 text-center">Quantity</h3>
+    <h3 class="col-1 text-center">Price</h3>
+</div>
+
+<hr class="hr-2 bg-musaca" />
+
+
+@{
+var total = 0m;
+}
+@foreach(var product in Model)
+{
+@{
+var multiplier = product.Quantity * product.Price;
+}
+<div class="d-flex justify-content-between">
+    <div class="col-10">@product.Name</div>
+    <div class="col-1 text-center">x@product.Quantity</div>
+    <div class="col-1 text-center">$@multiplier</div>
+</div>
+@{
+total += product.Price * product.Quantity;}
+}
+
+<hr class="hr-2 bg-musaca" />
+<form method="post" action="/Receipts/Create" class="d-flex justify-content-between">
+
+    <button type="submit" class="btn bg-musaca text-white col-md-3">Cashout</button>
+    <h2>Total: $@total</h2>
+</form>

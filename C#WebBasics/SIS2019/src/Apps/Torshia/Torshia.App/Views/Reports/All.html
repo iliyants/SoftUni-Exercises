@@ -1,0 +1,29 @@
+﻿<h1 class="text-center text-torshia">Task Reports</h1>
+<hr class="hr-2 bg-torshia" />
+<table class="table w-75 mx-auto table-hover">
+    <thead>
+        <tr class="row">
+            <th class="col-md-1">#</th>
+            <th class="col-md-5">Task</th>
+            <th class="col-md-1">Level</th>
+            <th class="col-md-2">Status</th>
+            <th class="col-md-2">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var task in Model)
+        {
+        <tr class="row">
+            <th class="col-md-1">1</th>
+            <td class="col-md-5">@task.TaskName</td>
+            <td class="col-md-1">@task.TaskLevel</td>
+            <td class="col-md-2">@task.TaskStatus</td>
+            <td class="col-md-2">
+                <div class="button-holder d-flex justify-content-between">
+                    <a href="/Tasks/DetailsAdmin?id=@task.Id"><h6 class="card-link">Details</h6></a>
+                </div>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

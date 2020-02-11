@@ -1,0 +1,52 @@
+﻿@if(User == null)
+{
+<div class="jumbotron mt-3 bg-torshia">
+    <h1 class="text-white">Welcome to TORSHIA Task Management.</h1>
+    <hr class="bg-white hr-2" />
+    <h3 class="text-white"><a href="/Users/Login">Login</a> if you have an account.</h3>
+    <h3 class="text-white"><a href="/Users/Register">Register</a> if you don't.</h3>
+</div>
+}
+@else
+{
+<div class="jumbotron mt-3 bg-white">
+    @if(User.Roles.FirstOrDefault() != "Admin")
+    {
+    <h1 class="text-torshia text-center">Hello, @User.Username</h1>
+    <h2 class="text-torshia text-center">Have a nice tasking experience!</h2>
+    }
+    @else
+    {
+    <h1 class="text-torshia text-center">Welcome, Admin - @User.Username</h1>
+    <h2 class="text-torshia text-center">Enjoy your work!</h2>
+    }
+</div>
+
+<hr class="bg-torshia hr-2" style="height: 2px" />
+
+<hr class="hr-2 bg-white text-white" />
+<div class="container-fluid">
+    <div class="row justify-content-left">
+        @foreach(var task in Model)
+        {
+        <div class="col-md-3 bg-torshia text-center text-white">
+            <h6 class="task-title text-white text-center my-3">@task.Name</h6>
+            <hr class="bg-white hr-2 w-75">
+            <h6 class="card-title text-white text-center my-4">Level: @task.Level</h6>
+            <hr class="bg-white hr-2 w-75">
+            <div class="follow-button-holder d-flex justify-content-between w-50 mx-auto mt-4">
+                <a href="/Reports/Create?id=@task.Id"><h6 class="card-link">Report</h6></a>
+                <a href="/Tasks/Details?id=@task.Id"><h6 class="card-link">Details</h6></a>
+            </div>
+        </div>
+        }
+    </div>
+</div>
+}
+
+
+
+
+
+
+
